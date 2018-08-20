@@ -1,0 +1,223 @@
+﻿<!Doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript" src="./javascripts/web3.min.js"></script>
+<script type="text/javascript">
+   
+    var Web3 = require('web3');
+    var web3 = new Web3();
+    web3.setProvider(new web3.providers.HttpProvider("http://192.168.0.205:8545"));
+    console.log(web3.eth.accounts[0]);
+ 
+	var vc = web3.eth.contract(
+	[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "cand",
+				"type": "string"
+			}
+		],
+		"name": "addCandidate",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "killContract",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "cand",
+				"type": "string"
+			}
+		],
+		"name": "vote",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "alreadyVoted",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "number",
+				"type": "uint8"
+			}
+		],
+		"name": "getCandidateString",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getNumOfCandidates",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "cand",
+				"type": "string"
+			}
+		],
+		"name": "getScore",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]).at("0x27495e68dbae62da0299bfdc1b8184e84528d065");	
+
+function showList(){
+ var table=document.getElementById("table1");
+ var length = vc.getNumOfCandidates();
+  console.log("getNumOfCandidates(): " + length);
+  for(var i=0;i<length;i++){
+   var candidate = vc.getCandidateString(i);
+   var row=table.insertRow();
+   var cell1=row.insertCell(0);
+   var cell2=row.insertCell(1);
+   cell1.innerHTML = candidate;
+   cell2.innerHTML = vc.getScore(candidate);
+  }
+}
+
+
+function vote(){
+ var candidate=document.getElementById("candidate").value;
+ var account=document.getElementById("account").value;
+ web3.eth.defaultAccount = account;
+ if(web3.personal.unlockAccount(account,document.getElementById('pass').value)){
+  var alreadyVoted=vc.alreadyVoted();
+  console.log(alreadyVoted);
+  if(alreadyVoted)
+   alert("이미 투표하셨습니다.");
+  else
+  vc.vote(candidate,function(err,result){ 
+  if(!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n"+result)});		
+  }
+ }
+
+function addCand(){
+  var candidate=document.getElementById("candidate").value;
+  var account=document.getElementById("account").value;
+  console.log("addCand account:" + account);
+  
+if(web3.personal.unlockAccount(account,document.getElementById('pass').value)){
+   vc.addCandidate(candidate,{from:account,gas:2000000},function(err,result){ 
+    if(!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n"+result)
+    });	
+  }
+ }
+	
+	// 사용자의 계좌들을 select로 만듭니다.
+function makeSelect() { 
+  var list = web3.eth.accounts;
+
+  var select =  document.getElementById('account');
+  for(var i = 0; i<list.length; i++){
+  var opt=document.createElement('option');
+  opt.value = list[i];
+  opt.innerHTML = list[i];
+  select.appendChild(opt);
+  }
+}
+
+</script>
+<style>
+table {    border-collapse: collapse;    border: 4px solid #bbb;	width: 50%;}
+tr:nth-child(even){background-color: #ccc}
+input, select {
+    padding: 6px 10px;
+    margin: 4px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;}
+button:hover {  background-color: gold;}
+</style>
+</head>
+<body >
+    <h1>블록체인 투표</h1>
+	<div>
+	<!-- 계정: <input type="text" id="account"> -->
+	
+	계정: <select id="account"></select>
+	<script>
+	makeSelect();
+	</script>
+<!--	패스워드: <input type="password" id="pass" value="pass0">	</div><br> -->
+	패스워드: <input type="password" id="pass">	
+	</div><br>
+	<div> <input type="text" id="candidate">
+	<button onClick="vote()">투표하기</button> 
+	<button onClick="addCand()">후보 추가하기</button> </div>
+  <fieldset style="width:300px">
+  <legend> 투표 결과 </legend>
+	<table id="table1" border="1">
+      <tr>
+	    <th> candidate</th>
+	    <th> vote</th>
+	  </tr>
+	</table>
+	   <script>
+	   showList();
+	   </script> 
+       </fieldset>
+</body>
+</html>
