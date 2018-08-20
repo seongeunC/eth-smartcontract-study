@@ -1,15 +1,15 @@
 # eth-smartcontract-study
 
 ## 이더리움 private network 구축 & dapp 개발 셋팅
-	1. virtualBox 설치 
-  2. 광학드라이브 ubuntu iso 파일 삽입
-	3. linux 실행
+1. virtualBox 설치 
+2. 광학드라이브 ubuntu iso 파일 삽입
+3. linux 실행
 
 ----
 
 #### 1. 터미널 실행 
 
-//이더리움 셋팅
+이더리움 셋팅
 ```
 $sudo apt-get -y update && sudo apt-get -y upgrade
 $sudo apt-get install nodejs
@@ -27,8 +27,8 @@ $sudo apt-get install ssh$sudo apt-get install openssh-server
 
 ------------------------------------스냅샷 복원 , 저장된 상태 삭제 -----------------------------------------------------
 
-	1. 설정 -> 네트워크 -> 어댑터 추가(브리지 어댑터) -> 가상머신 시작
-  2. putty 실행
+1. 설정 -> 네트워크 -> 어댑터 추가(브리지 어댑터) -> 가상머신 시작
+2. putty 실행
 
 ##### 1번 putty 터미널
 ```
@@ -41,8 +41,8 @@ $cd contract_testnet
 $geth --datadir ~/contract_testnet/ init ~/contract_testnet/genesis.json
 $nohup geth --networkid 4689 --nodiscover --datadir ~/test --rpc --rpcaddr "192.168.0.210" --rpcport 8545 --rpccorsdomain "*" --rpcapi "admin,db,eth,debug,miner,net,ssh,txpool,personal,web3" --verbosity 6 2>> ~/test/geth.log&
 &ps -eaf | grep geth$tail -f geth.log
-'''
 ```
+
 #### 2번 putty 터미널
 ```
 $geth attach rpc:http://192.168.0.x:8545
