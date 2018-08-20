@@ -109,17 +109,17 @@ $cd web3$npm install$DEBUG=web3 npm start웹 브라우저에서 http://192.168.0
 >"Ethereum Wallet.exe" --rpc http://192.168.0.x:8545 
 ```
 --------------peer 연결  "user1" , "user2" 가 잇다고 가정 -----------------------------
-"user1"과 "user2" 모두 1번 putty 터미널과 2번 putty터미널을 진행
+1. "user1"과 "user2" 모두 1번 putty 터미널과 2번 putty터미널을 진행
 
-user1 터미널
+2. user1 터미널
 ```
 >admin.nodeInfo.endoe"enode://c482ifnvmveu3~ ~ ~ @[::]:30303?discport = 0" ▶[::]부분에 user1번의 192.168.0.x를 대입하여 모두 복사
 ```
-user2 터미널
+3. user2 터미널
 ```
 >admin.addPeer("[위에서 복사한 enode 값]")
 ```
-연결확인
+4. 연결확인
 ```
 >net.peerCount1
 >admin.peers1
