@@ -75,16 +75,15 @@ Wei를 Ether로 변환
 ```
 
 ---------------------------remix와 geth 연동 & SmartContract 작성 & Private network에 배포-------------------------------
-	1. remix 실행
-	2. setting -> solidity version 선택 
-	3. run -> web3provider  선택 -> [http://192.168.0.x:8545] 연결    ! {오류 시 url에서 s를 지우고 다시}
+1. remix 실행
+2. setting -> solidity version 선택 
+3. run -> web3provider  선택 -> [http://192.168.0.x:8545] 연결    ! {오류 시 url에서 s를 지우고 다시}
 
-
-	1. SmartContract 작성  -> compile -> start to compile
-	2. [2]번 putty터미널 창 실행
-	3. personal.unlockAccount(eth.accounts[0])
-	4. miner.start() 
-	5. remix 창 -> run -> deploy
+1. SmartContract 작성  -> compile -> start to compile
+2. [2]번 putty터미널 창 실행
+3. personal.unlockAccount(eth.accounts[0])
+4. miner.start() 
+5. remix 창 -> run -> deploy
 
 -------------------------------------------------웹 서비스를 통한 dapp 구현 ----------------------------------------------
 #### 1번 putty 실행
@@ -95,36 +94,33 @@ $sudo npm install express-generator -g
 $sudo ln -s /usr/bin/nodejs /usr/local/bin/node$express web3
 $cd web3$npm install$DEBUG=web3 npm start웹 브라우저에서 http://192.168.0.x로 접속
 ```
-	1. WinSCP 설치
-	2. 설치 후 로그인 창에서 호스트 이름과 포트번호 입력 (PUTTY 접속 할 때 동일)
-	3. /home/[user]/web3/public 폴더에 html 파일 업로드
-	4. /home/[user]/web3/public/javascripts 폴더에 web3.min.js 파일 업로드 -> 직접 web3.min.js파일을 다운로드 하지않아도 됨 CDN 기법을 사용!
-
+1. WinSCP 설치
+2. 설치 후 로그인 창에서 호스트 이름과 포트번호 입력 (PUTTY 접속 할 때 동일)
+3. /home/[user]/web3/public 폴더에 html 파일 업로드
+4. /home/[user]/web3/public/javascripts 폴더에 web3.min.js 파일 업로드 -> 직접 web3.min.js파일을 다운로드 하지않아도 됨 CDN 기법을 사용!
 -><script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js">
-	1. 웹 브라우저에서 "192.168.0.x:3000/[html파일 명] 접속
+5. 웹 브라우저에서 "192.168.0.x:3000/[html파일 명] 접속
 
-----------------------------------------------------------------------Mist 설치 & private network 연동------------------------------------
-	1. 미스트 설치(launch문구 뜨면 실행 )후 바로 종료
-	2. cmd창 실행
-
+---------------------------------------------------Mist 설치 & private network 연동-----------------------------------
+1. 미스트 설치(launch문구 뜨면 실행 )후 바로 종료
+2. cmd창 실행
+```
 >cd [Ethereum mist 설치 폴더]
 >"Ethereum Wallet.exe" --rpc http://192.168.0.x:8545 
+```
 --------------peer 연결  "user1" , "user2" 가 잇다고 가정 -----------------------------
-	1. "user1"과 "user2" 모두 1번 putty 터미널과 2번 putty터미널을 진행
+"user1"과 "user2" 모두 1번 putty 터미널과 2번 putty터미널을 진행
 
-//user1 터미널
->admin.nodeInfo.endoe"enode://c482ifnvmveu3~ ~ ~ @[::]:30303?discport = 0" ▶[::]부분에 user1번의 192.168.0.x를 대입하여 모두 복사//user2 터미널
+user1 터미널
+```
+>admin.nodeInfo.endoe"enode://c482ifnvmveu3~ ~ ~ @[::]:30303?discport = 0" ▶[::]부분에 user1번의 192.168.0.x를 대입하여 모두 복사
+```
+user2 터미널
+```
 >admin.addPeer("[위에서 복사한 enode 값]")
-	1. 연결확인
-
+```
+연결확인
+```
 >net.peerCount1
 >admin.peers1
-
-----------
-#!/bin/sh
-sudo ifconfig enp0s8 "$1" netmask 255.255.255.0 up
-sudo route add default gw "$2"cd contract_testnetgeth --datadir ~/contract_testnet/ init ~/contract_testnet/genesis.json
-nohup geth --networkid 4689 --nodiscover --datadir ~/contract_testnet --rpc --rpcaddr '"'"$1"'"' --rpcport 8545 --rpccorsdomain '"*"' --rpcapi '"admin,db,eth,debug,miner,net,shh,txpool,personal,web3"' --verbosity 6 2>> ~/contract_testnet/geth.log&
-tail -f geth.log
-
----------
+```
